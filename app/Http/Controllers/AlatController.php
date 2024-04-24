@@ -110,7 +110,8 @@ class AlatController extends Controller
         $alat->delete();
 
         return response()->json([
-            'message' => 'Data alat berhasil dihapus'
+            'message' => 'Data alat berhasil dihapus',
+            'data' => $alat
         ], 200);
     }
 

@@ -15,20 +15,28 @@ class AdminController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
-    {
-        try {
-            $admins = Admin::all();
-
+{
+    try {
+        $admins = Admin::all();
+        
+        if ($admins->isEmpty()) {
             return response()->json([
-                'message' => 'Success',
+                'message' => 'Data masih kosong',
                 'data' => $admins
             ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Terjadi kesalahan pada server!'
-            ], 500);
         }
+
+        return response()->json([
+            'message' => 'Data Admin berhasil ditemukan',
+            'data' => $admins
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Terjadi kesalahan pada server!'
+        ], 500);
     }
+}
+
 
     /**
      * Store a newly created resource in storage.
@@ -80,12 +88,13 @@ class AdminController extends Controller
 
             if (!$admin) {
                 return response()->json([
-                    'message' => 'Admin tidak ditemukan'
+                    'message' => 'Data Admin tidak ditemukan',
+                    'data' => $admin
                 ], 404);
             }
 
             return response()->json([
-                'message' => 'Success',
+                'message' => 'Data Admin berhasil ditemukan',
                 'data' => $admin
             ], 200);
         } catch (\Exception $e) {
@@ -106,7 +115,7 @@ class AdminController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'admin_username' => 'required|max:50|unique:admin,admin_username,' . $id,
+                'admin_username' => 'required|max:50' . $id,
                 'password' => 'required|max:255'
             ]);
 
@@ -121,7 +130,8 @@ class AdminController extends Controller
 
             if (!$admin) {
                 return response()->json([
-                    'message' => 'Admin tidak ditemukan'
+                    'message' => 'Data Admin tidak ditemukan!',
+                    'data' => $admin
                 ], 404);
             }
 
@@ -131,7 +141,7 @@ class AdminController extends Controller
             ]);
 
             return response()->json([
-                'message' => 'Admin berhasil diperbarui',
+                'message' => 'Data Admin berhasil diperbarui!',
                 'data' => $admin
             ], 200);
         } catch (\Exception $e) {
@@ -154,14 +164,16 @@ class AdminController extends Controller
 
             if (!$admin) {
                 return response()->json([
-                    'message' => 'Admin tidak ditemukan'
+                    'message' => 'Data Admin tidak ditemukan!',
+                    'data' => $admin
                 ], 404);
             }
 
             $admin->delete();
 
             return response()->json([
-                'message' => 'Admin berhasil dihapus'
+                'message' => 'Data Admin berhasil dihapus!',
+                'data' => $admin
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

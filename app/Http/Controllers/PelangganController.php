@@ -138,8 +138,8 @@ class PelangganController extends Controller
      */
     public function destroy(string $id)
     {
-        try {
-            $pelanggan = $this->pelangganModel->get($id);
+        
+            $pelanggan = $this->pelangganModel->find($id);
 
             if (!$pelanggan) {
                 return response()->json([
@@ -151,10 +151,7 @@ class PelangganController extends Controller
                     'data' => $pelanggan
                 ], 200);
             }
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Terjadi kesalahan pada server'
-            ], 500);
+        
         }
     }
-}
+

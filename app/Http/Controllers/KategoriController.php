@@ -136,6 +136,7 @@ class KategoriController extends Controller
 
                 return response()->json([
                     'message' => 'Data Kategori berhasil dihapus',
+                    'data' => $kategori
                 ], 200);
             }
 

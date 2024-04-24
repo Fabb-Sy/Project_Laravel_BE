@@ -31,4 +31,28 @@ class Penyewaan_DetailModel extends Model
     {
         return $this->belongsTo(AlatModel::class, 'penyewaan_detail_alat_id', 'alat_id');
     }
+    public function getAllPenyewaan_Detail()
+    {
+        return $this->all();
+    }
+    public function findPenyewaan_Detail($id)
+    {
+        return $this->find($id);
+    }
+    public function updatePenyewaan_Detail($data, $id)
+    {
+        $Penyewaan_Detail = $this->find($id);
+        $Penyewaan_Detail->fill($data);
+        $Penyewaan_Detail->save();
+
+        return $Penyewaan_Detail;
+    }
+    public function deletePenyewaan_Detail($id)
+    {
+        $Penyewaan_Detail = $this->find($id);
+        if ($Penyewaan_Detail) {
+            $Penyewaan_Detail->delete();
+        }
+        return $Penyewaan_Detail;
+    }
 }

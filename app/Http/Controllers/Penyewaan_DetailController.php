@@ -23,14 +23,13 @@ class Penyewaan_DetailController extends Controller
         try {
             $penyewaanDetails = $this->penyewaanDetailModel->all();
 
-            if ($penyewaanDetails->isEmpty()) {
-            {
-                return response()->json([
-                    'message' => 'Data Penyewaan Detail masih kosong',
-                    'data' => $penyewaanDetails
-                ], 200);
+            if ($penyewaanDetails->isEmpty()) { {
+                    return response()->json([
+                        'message' => 'Data Penyewaan Detail masih kosong',
+                        'data' => $penyewaanDetails
+                    ], 200);
+                }
             }
-        }
             return response()->json([
                 'message' => 'Data Penyewaan Detail berhasil didapatkan',
                 'data' => $penyewaanDetails
@@ -45,35 +44,22 @@ class Penyewaan_DetailController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(Request $request)
-    // {
-    //     try {
-    //         $validator = Validator::make($request->all(), [
-    //             'penyewaan_detail_penyewaan_id' => 'required|exists:penyewaan,penyewaan_id',
-    //             'penyewaan_detail_alat_id' => 'required|exists:alat,alat_id',
-    //             'penyewaan_detail_jumlah' => 'required|integer|min:1',
-    //             'penyewaan_detail_subharga' => 'required|integer|min:0',
-    //         ]);
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'penyewaan_detail_penyewaan_id' => 'required|exists:penyewaan,penyewaan_id',
+            'penyewaan_detail_alat_id' => 'required|exists:alat,alat_id',
+            'penyewaan_detail_jumlah' => 'required|integer',
+            'penyewaan_detail_subharga' => 'required|integer',
+        ]);
 
-    //         if ($validator->fails()) {
-    //             return response()->json([
-    //                 'message' => 'Validasi gagal',
-    //                 'errors' => $validator->errors()
-    //             ], 422);
-    //         } else {
-    //             $penyewaanDetail = $this->penyewaanDetailModel->create($validator->validated());
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'message' => 'Validasi pada data Penyewaan Detail gagal!', 'errors' => $validator->errors()], 422);
+        }
 
-    //             return response()->json([
-    //                 'message' => 'Data penyewaan_detail berhasil dibuat',
-    //                 'data' => $penyewaanDetail
-    //             ], 201);
-    //         }
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'message' => 'Terjadi kesalahan pada server'
-    //         ], 500);
-    //     }
-    // }
+        $penyewaanDetail = Penyewaan_DetailModel::create($validator->validated());
+        return response()->json(['status' => 201, 'message' => 'Data Penyewaan Detail berhasil di buat!', 'data' => $penyewaanDetail], 201);
+    }
 
     /**
      * Display the specified resource.
@@ -102,53 +88,44 @@ class Penyewaan_DetailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, $id)
-    // {
-    //     try {
-    //         $validator = Validator::make($request->all(), [
-    //             'penyewaan_detail_penyewaan_id' => 'required|exists:penyewaan,penyewaan_id',
-    //             'penyewaan_detail_alat_id' => 'required|exists:alat,alat_id',
-    //             'penyewaan_detail_jumlah' => 'required|integer|min:1',
-    //             'penyewaan_detail_subharga' => 'required|integer|min:0',
-    //         ]);
+    public function update(Request $request, $id)
+{
+    $validator = Validator::make($request->all(), [
+        'penyewaan_detail_penyewaan_id' => 'required|exists:penyewaan,penyewaan_id',
+        'penyewaan_detail_alat_id' => 'required|exists:alat,alat_id',
+        'penyewaan_detail_jumlah' => 'required|integer',
+        'penyewaan_detail_subharga' => 'required|integer',
+    ]);
 
-    //         if ($validator->fails()) {
-    //             return response()->json([
-    //                 'message' => 'Validasi gagal',
-    //                 'errors' => $validator->errors()
-    //             ], 422);
-    //         } else {
-    //             $penyewaanDetail = $this->penyewaanDetailModel->findOrFail($id);
-    //             $penyewaanDetail->update($validator->validated());
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 422, 
+            'message' => 'Validasi pada Penyewaan Detail gagal!', 
+            'errors' => $validator->errors()
+        ], 422);
+    }
 
-    //             return response()->json([
-    //                 'message' => 'Data penyewaan_detail berhasil diperbarui',
-    //                 'data' => $penyewaanDetail
-    //             ], 200);
-    //         }
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'message' => 'Terjadi kesalahan pada server'
-    //         ], 500);
-    //     }
-    // }
+    $penyewaanDetail = $this->penyewaanDetailModel->updatePenyewaan_Detail($validator->validated(), $id);
+
+    return response()->json([
+        'status' => 200, 
+        'message' => $penyewaanDetail
+    ], 200);
+}
+
+
 
     /**
      * Remove the specified resource from storage.
      */
-    // public function destroy($id)
-    // {
-    //     try {
-    //         $penyewaanDetail = $this->penyewaanDetailModel->findOrFail($id);
-    //         $penyewaanDetail->delete();
+    public function destroy($id)
+    {
+        $penyewaanDetail = $this->penyewaanDetailModel->deletePenyewaan_Detail($id);
 
-    //         return response()->json([
-    //             'message' => 'Data penyewaan_detail berhasil dihapus'
-    //         ], 200);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'message' => 'Data penyewaan_detail tidak ditemukan'
-    //         ], 404);
-    //     }
-    // }
+        return response()->json([
+            'status' => 200, 
+            'message' => 'Data Penyewaan Detail berhasil dihapus!', 
+            'data' => $penyewaanDetail
+        ], 200);
+    }
 }

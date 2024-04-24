@@ -27,8 +27,19 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('login', [LoginController::class, 'login']);
-Route::post('register', [RegisterController::class, 'register']);
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/register', [RegisterController::class, 'register']);
+
+
+
+// Route::apiResource('/alat', AlatController::class);
+// Route::apiResource('/pelanggandata', Pelanggan_DataController::class);
+// Route::apiResource('/pelanggan', PelangganController::class);
+// Route::apiResource('/kategori', KategoriController::class);
+// Route::delete('kategori/{id}', 'KategoriController@destroy');
+// Route::apiResource('/penyewaan', PenyewaanController::class);
+// Route::apiResource('/penyewaandetail', Penyewaan_DetailController::class);
+// Route::apiResource('/admin', AdminController::class);
 
 // Middleware untuk autentikasi admin
 Route::middleware(['auth:admin-api', 'check.admin.token'])->group(function () {
@@ -39,4 +50,5 @@ Route::middleware(['auth:admin-api', 'check.admin.token'])->group(function () {
     Route::apiResource('/penyewaan', PenyewaanController::class);
     Route::apiResource('/penyewaandetail', Penyewaan_DetailController::class);
     Route::apiResource('/admin', AdminController::class);
+    Route::delete('kategori/{id}', 'KategoriController@destroy');
 });
